@@ -2,8 +2,9 @@ package com.example.todo_application.data.models
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import com.example.todo_application.data.models.Constants.DATABASE_TABLE
 
-@Entity(tableName = "task_table")
+@Entity(tableName = DATABASE_TABLE)
 data class ToDoTask (
     @PrimaryKey(autoGenerate = true)
     val id: Int = 0,
