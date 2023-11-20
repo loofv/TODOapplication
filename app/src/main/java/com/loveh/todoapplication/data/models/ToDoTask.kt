@@ -1,8 +1,8 @@
-package com.example.todo_application.data.models
+package com.loveh.todoapplication.data.models
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import com.example.todo_application.data.models.Constants.DATABASE_TABLE
+import com.loveh.todoapplication.data.models.Constants.DATABASE_TABLE
 
 @Entity(tableName = DATABASE_TABLE)
 data class ToDoTask (

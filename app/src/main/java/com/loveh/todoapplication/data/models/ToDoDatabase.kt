@@ -1,9 +1,9 @@
-package com.example.todo_application.data.models
+package com.loveh.todoapplication.data.models
 
 import androidx.room.Database
 import androidx.room.RoomDatabase
 
 @Database(entities = [ToDoTask::class], version = 1, exportSchema = false)
 abstract class ToDoDatabase: RoomDatabase() {
-    abstract fun ToDoDao(): ToDoDao
+    abstract fun toDoDao(): ToDoDao
 }

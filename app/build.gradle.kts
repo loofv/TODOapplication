@@ -8,11 +8,11 @@ plugins {
 }
 
 android {
-    namespace = "com.example.todo_application"
+    namespace = "com.loveh.todoapplication"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.example.todo_application"
+        applicationId = "com.loveh.todoapplication"
         minSdk = 24
         targetSdk = 34
         versionCode = 1
@@ -62,7 +62,7 @@ dependencies {
     implementation("androidx.compose.ui:ui")
     implementation("androidx.compose.ui:ui-graphics")
     implementation("androidx.compose.ui:ui-tooling-preview")
-    implementation("androidx.compose.material3:material3")
+    implementation("androidx.compose.material:material-android:1.5.4")
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
@@ -70,6 +70,9 @@ dependencies {
     androidTestImplementation("androidx.compose.ui:ui-test-junit4")
     debugImplementation("androidx.compose.ui:ui-tooling")
     debugImplementation("androidx.compose.ui:ui-test-manifest")
+
+    // Navigation
+    implementation("androidx.navigation:navigation-compose:2.7.5")
 
     // Room
     implementation("androidx.room:room-runtime:2.6.0")
