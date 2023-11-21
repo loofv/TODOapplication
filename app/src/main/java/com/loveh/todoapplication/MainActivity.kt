@@ -3,10 +3,10 @@ package com.loveh.todoapplication
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.material.TopAppBar
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
-import com.loveh.todoapplication.navigation.Navigation
+import com.loveh.todoapplication.navigation.SetupNavigation
+import com.loveh.todoapplication.ui.screens.list.ListScreen
 import com.loveh.todoapplication.ui.theme.TODOapplicationTheme
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -19,7 +19,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             TODOapplicationTheme {
                 navController = rememberNavController()
-                Navigation(navController = navController)
+                SetupNavigation(navController = navController)
             }
         }
     }

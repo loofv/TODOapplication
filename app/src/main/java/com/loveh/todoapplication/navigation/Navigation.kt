@@ -9,7 +9,7 @@ import com.loveh.todoapplication.navigation.destinations.listComposable
 import com.loveh.todoapplication.navigation.destinations.taskComposable
 
 @Composable
-fun Navigation(
+fun SetupNavigation(
     navController: NavHostController
 ){
     val screen = remember(navController) {
