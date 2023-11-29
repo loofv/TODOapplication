@@ -39,6 +39,7 @@ import com.loveh.todoapplication.ui.theme.topAppBarBackgroundColor
 import com.loveh.todoapplication.ui.theme.topAppBarContentColor
 import com.loveh.todoapplication.ui.viewmodels.SharedViewModel
 import com.loveh.todoapplication.util.SearchAppBarState
+import com.loveh.todoapplication.util.TrailingIconState
 
 @Composable
 fun ListAppBar(
@@ -184,6 +185,9 @@ fun SearchAppBar(
     onCloseClicked: () -> Unit,
     onSearchClicked: (String) -> Unit,
 ) {
+
+    var trailingIconState by remember { mutableStateOf(TrailingIconState.READY_TO_DELETE) }
+
     Surface(
         modifier = Modifier
             .fillMaxWidth()
@@ -222,7 +226,22 @@ fun SearchAppBar(
             trailingIcon = {
                 IconButton(
                     modifier = Modifier.alpha(ContentAlpha.disabled),
-                    onClick = {}
+                    onClick = {
+                        when(trailingIconState) {
+                            TrailingIconState.READY_TO_DELETE -> {
+                                onTextChange("")
+                                trailingIconState = TrailingIconState.READY_TO_CLOSE
+                            }
+                            TrailingIconState.READY_TO_CLOSE -> {
+                                if (text.isNotEmpty()) {
+                                    onTextChange("")
+                                } else {
+                                    onCloseClicked()
+                                    trailingIconState = TrailingIconState.READY_TO_DELETE
+                                }
+                            }
+                        }
+                    }
                 )
                 {
                     Icon(
