@@ -1,61 +1,99 @@
 package com.loveh.todoapplication.ui.screens.list
 
-import android.graphics.drawable.Icon
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.AppBarDefaults
+import androidx.compose.material.ContentAlpha
 import androidx.compose.material.DropdownMenu
 import androidx.compose.material.DropdownMenuItem
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Surface
 import androidx.compose.material.Text
+import androidx.compose.material.TextField
+import androidx.compose.material.TextFieldDefaults
 import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import com.loveh.todoapplication.R
 import com.loveh.todoapplication.components.PriorityItem
 import com.loveh.todoapplication.data.models.Priority
 import com.loveh.todoapplication.ui.theme.topAppBarBackgroundColor
 import com.loveh.todoapplication.ui.theme.topAppBarContentColor
+import com.loveh.todoapplication.ui.viewmodels.SharedViewModel
+import com.loveh.todoapplication.util.SearchAppBarState
+import hilt_aggregated_deps._com_loveh_todoapplication_ui_viewmodels_SharedViewModel_HiltModules_KeyModule
+import org.w3c.dom.Text
 
 @Composable
-fun ListAppBar() {
-    DefaultListAppBar(
-        onSearchClicked = {},
-        onSortClicked = {},
-        onDeleteClicked = {}
-    )
+fun ListAppBar(
+    sharedViewModel: SharedViewModel,
+    searchAppBarState: SearchAppBarState,
+    searchTextState: String
+) {
+
+    when (searchAppBarState) {
+        SearchAppBarState.CLOSED -> {
+            DefaultListAppBar(
+                onSearchClicked = {
+                    sharedViewModel.searchAppBarState.value = SearchAppBarState.OPENED
+                },
+                onSortClicked = {},
+                onDeleteClicked = {}
+            )
+        } else -> {
+            SearchAppBar(text = searchTextState,
+                onTextChange = { sharedViewModel.searchTextState.value = it },
+                onCloseClicked = {
+                    sharedViewModel.searchAppBarState.value = SearchAppBarState.CLOSED
+                    sharedViewModel.searchTextState.value = ""
+                }
+            ) {
+            }
+        }
+    }
 }
 
 @Composable
 fun DefaultListAppBar(
-    onSearchClicked: () -> Unit,
+    onSearchClicked: (String) -> Unit,
     onSortClicked: (Priority) -> Unit,
     onDeleteClicked: () -> Unit,
 ) {
     TopAppBar(
         title = {
-        Text(text = "Tasks", color = MaterialTheme.colors.topAppBarContentColor)
-    },
-        actions = {
-         ListAppBarActions(
-            onSearchClicked = onSearchClicked,
-            onSortClicked = onSortClicked,
-            onDeleteClicked = onDeleteClicked)
+            Text(text = "Tasks", color = Color.Black)
         },
-       backgroundColor = MaterialTheme.colors.topAppBarBackgroundColor
+        actions = {
+            ListAppBarActions(
+                onSearchClicked = onSearchClicked,
+                onSortClicked = onSortClicked,
+                onDeleteClicked = onDeleteClicked)
+        },
+        backgroundColor = MaterialTheme.colors.topAppBarBackgroundColor
     )
 }
 
 @Composable
 fun ListAppBarActions(
-    onSearchClicked: () -> Unit,
+    onSearchClicked: (String) -> Unit,
     onSortClicked: (Priority) -> Unit,
     onDeleteClicked: () -> Unit
 ) {
@@ -69,9 +107,9 @@ fun ListAppBarActions(
 fun SortAction(
     onSortClicked: (Priority) -> Unit
 ) {
-var expanded by remember { mutableStateOf(false) }
+    var expanded by remember { mutableStateOf(false) }
 
-    IconButton(onClick = { }) {
+    IconButton(onClick = { expanded = true }) {
         Icon(
             painter = painterResource(id = R.drawable.ic_filter_list),
             contentDescription = "Sort"
@@ -103,14 +141,14 @@ var expanded by remember { mutableStateOf(false) }
 
 @Composable
 fun SearchAction(
-    onSearchClicked: () -> Unit
+    onSearchClicked: (String) -> Unit
 ) {
     IconButton(onClick = { onSearchClicked }) {
         Icon(
             imageVector = Icons.Filled.Search,
             contentDescription = stringResource(id = R.string.search_tasks),
-            tint = MaterialTheme.colors.topAppBarContentColor
-            )
+            tint = Color.Black
+        )
     }
 }
 
@@ -120,7 +158,7 @@ fun DeleteAllAction(
 ) {
     var expanded by remember { mutableStateOf(false) }
 
-    IconButton(onClick = { }) {
+    IconButton(onClick = { expanded = true }) {
         Icon(
             painter = painterResource(id = R.drawable.ic_vertical_menu),
             contentDescription = "Delete all"
@@ -132,9 +170,83 @@ fun DeleteAllAction(
                 expanded = false
                 onDeleteClicked()
             }) {
-               Text(text = "Delete all")
+                Text(text = "Delete all")
             }
         }
+    }
+}
+
+@Composable
+fun SearchAppBar(
+    text: String,
+    onTextChange: (String) -> Unit,
+    onCloseClicked: () -> Unit,
+    onSearchClicked: (String) -> Unit,
+) {
+    Surface(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(56.dp),
+        elevation = AppBarDefaults.TopAppBarElevation,
+        color = MaterialTheme.colors.topAppBarBackgroundColor
+    )
+    {
+        TextField(
+            modifier = Modifier.fillMaxWidth(),
+            value = text,
+            onValueChange = {
+                onTextChange(it)
+            },
+            placeholder = {
+                Text(
+                    modifier = Modifier.alpha(ContentAlpha.medium),
+                    text = "Search",
+                    color = Color.White
+                )
+            },
+            singleLine = true,
+            leadingIcon = {
+                IconButton(
+                    modifier = Modifier.alpha(ContentAlpha.disabled),
+                    onClick = {}
+                )
+                {
+                    Icon(
+                        imageVector = Icons.Filled.Search,
+                        contentDescription = "Search",
+                        tint = Color.Black
+                    )
+                }
+            },
+            trailingIcon = {
+                IconButton(
+                    modifier = Modifier.alpha(ContentAlpha.disabled),
+                    onClick = {}
+                )
+                {
+                    Icon(
+                        imageVector = Icons.Filled.Close,
+                        contentDescription = "Close",
+                        tint = Color.Black
+                    )
+                }
+            },
+            keyboardOptions = KeyboardOptions(
+                imeAction = ImeAction.Search
+            ),
+            keyboardActions = KeyboardActions(
+                onSearch = {
+                    onSearchClicked(text)
+                }
+            ),
+            colors = TextFieldDefaults.textFieldColors(
+                cursorColor = MaterialTheme.colors.topAppBarContentColor,
+                focusedIndicatorColor = Color.Transparent,
+                disabledIndicatorColor = Color.Transparent,
+                unfocusedIndicatorColor = Color.Transparent,
+                backgroundColor = Color.Transparent
+            )
+        )
     }
 }
 
@@ -146,4 +258,13 @@ private fun DefaultListAppBarPreview() {
         onSortClicked = {},
         onDeleteClicked = {}
     )
+}
+@Composable
+@Preview
+private fun SearchAppBarPreview() {
+    SearchAppBar(text = "Search",
+        onTextChange = {},
+        onCloseClicked = {},
+    ) {
+    }
 }

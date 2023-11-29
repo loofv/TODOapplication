@@ -7,9 +7,11 @@ import androidx.navigation.navArgument
 import com.loveh.todoapplication.data.models.Constants.LIST_ARGUMENT_KEY
 import com.loveh.todoapplication.data.models.Constants.LIST_SCREEN
 import com.loveh.todoapplication.ui.screens.list.ListScreen
+import com.loveh.todoapplication.ui.viewmodels.SharedViewModel
 
 fun NavGraphBuilder.listComposable(
-    navigateToTaskScreen: (Int) -> Unit
+    navigateToTaskScreen: (Int) -> Unit,
+    sharedViewModel: SharedViewModel
 ) {
     composable(
         route = LIST_SCREEN,
@@ -17,6 +19,6 @@ fun NavGraphBuilder.listComposable(
          type = NavType.StringType
         })
     ) {
-        ListScreen(navigateToTaskScreen = navigateToTaskScreen)
+        ListScreen(navigateToTaskScreen = navigateToTaskScreen, sharedViewModel = sharedViewModel)
     }
 }
