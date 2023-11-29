@@ -39,8 +39,6 @@ import com.loveh.todoapplication.ui.theme.topAppBarBackgroundColor
 import com.loveh.todoapplication.ui.theme.topAppBarContentColor
 import com.loveh.todoapplication.ui.viewmodels.SharedViewModel
 import com.loveh.todoapplication.util.SearchAppBarState
-import hilt_aggregated_deps._com_loveh_todoapplication_ui_viewmodels_SharedViewModel_HiltModules_KeyModule
-import org.w3c.dom.Text
 
 @Composable
 fun ListAppBar(
@@ -64,16 +62,17 @@ fun ListAppBar(
                 onCloseClicked = {
                     sharedViewModel.searchAppBarState.value = SearchAppBarState.CLOSED
                     sharedViewModel.searchTextState.value = ""
-                }
-            ) {
-            }
+                },
+                onSearchClicked = {}
+            )
+
         }
     }
 }
 
 @Composable
 fun DefaultListAppBar(
-    onSearchClicked: (String) -> Unit,
+    onSearchClicked: () -> Unit,
     onSortClicked: (Priority) -> Unit,
     onDeleteClicked: () -> Unit,
 ) {
@@ -93,7 +92,7 @@ fun DefaultListAppBar(
 
 @Composable
 fun ListAppBarActions(
-    onSearchClicked: (String) -> Unit,
+    onSearchClicked: () -> Unit,
     onSortClicked: (Priority) -> Unit,
     onDeleteClicked: () -> Unit
 ) {
@@ -141,9 +140,11 @@ fun SortAction(
 
 @Composable
 fun SearchAction(
-    onSearchClicked: (String) -> Unit
+    onSearchClicked: () -> Unit
 ) {
-    IconButton(onClick = { onSearchClicked }) {
+    IconButton(onClick = {
+        onSearchClicked()
+    }) {
         Icon(
             imageVector = Icons.Filled.Search,
             contentDescription = stringResource(id = R.string.search_tasks),
