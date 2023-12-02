@@ -37,6 +37,7 @@ import com.loveh.todoapplication.components.PriorityItem
 import com.loveh.todoapplication.data.models.Priority
 import com.loveh.todoapplication.ui.theme.topAppBarBackgroundColor
 import com.loveh.todoapplication.ui.theme.topAppBarContentColor
+import com.loveh.todoapplication.ui.theme.topAppBarIconColor
 import com.loveh.todoapplication.ui.viewmodels.SharedViewModel
 import com.loveh.todoapplication.util.SearchAppBarState
 import com.loveh.todoapplication.util.TrailingIconState
@@ -79,7 +80,7 @@ fun DefaultListAppBar(
 ) {
     TopAppBar(
         title = {
-            Text(text = "Tasks", color = Color.Black)
+            Text(text = "Tasks", color = MaterialTheme.colors.topAppBarIconColor)
         },
         actions = {
             ListAppBarActions(
@@ -149,7 +150,7 @@ fun SearchAction(
         Icon(
             imageVector = Icons.Filled.Search,
             contentDescription = stringResource(id = R.string.search_tasks),
-            tint = Color.Black
+            tint = MaterialTheme.colors.topAppBarIconColor
         )
     }
 }
@@ -219,7 +220,7 @@ fun SearchAppBar(
                     Icon(
                         imageVector = Icons.Filled.Search,
                         contentDescription = "Search",
-                        tint = Color.Black
+                        tint = MaterialTheme.colors.topAppBarIconColor
                     )
                 }
             },
@@ -247,7 +248,7 @@ fun SearchAppBar(
                     Icon(
                         imageVector = Icons.Filled.Close,
                         contentDescription = "Close",
-                        tint = Color.Black
+                        tint = MaterialTheme.colors.topAppBarIconColor
                     )
                 }
             },

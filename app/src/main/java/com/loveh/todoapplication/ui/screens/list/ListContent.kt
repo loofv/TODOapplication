@@ -4,11 +4,12 @@ import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
@@ -27,8 +28,22 @@ import com.loveh.todoapplication.ui.theme.taskItemBackgroundColor
 import com.loveh.todoapplication.ui.theme.taskItemTextColor
 
 @Composable
-fun ListContent() {
-
+fun ListContent(
+    toDoTasks: List<ToDoTask>,
+    navigateToTaskScreen: (taskId: Int) -> Unit,
+) {
+    // LazyColumn is like recyclerView from XML.
+    // Dynamically sized list, represented graphically.
+    LazyColumn {
+        items(
+            items = toDoTasks,
+            key = { task ->
+                task.id
+            }
+            ) {task ->
+            TaskItem(toDoTask = task, navigateToTaskScreen = navigateToTaskScreen)
+        }
+    }
 }
 
 @OptIn(ExperimentalMaterialApi::class)
