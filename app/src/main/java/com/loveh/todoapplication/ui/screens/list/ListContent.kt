@@ -22,6 +22,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.CreationExtras
 import com.loveh.todoapplication.data.models.Priority
 import com.loveh.todoapplication.data.models.ToDoTask
 import com.loveh.todoapplication.ui.theme.taskItemBackgroundColor
@@ -29,6 +30,19 @@ import com.loveh.todoapplication.ui.theme.taskItemTextColor
 
 @Composable
 fun ListContent(
+    toDoTasks: List<ToDoTask>,
+    navigateToTaskScreen: (taskId: Int) -> Unit,
+) {
+
+    if (toDoTasks.isNotEmpty()) {
+        DisplayTasks(toDoTasks = toDoTasks, navigateToTaskScreen = navigateToTaskScreen)
+    } else {
+        EmptyContent()
+    }
+}
+
+@Composable
+fun DisplayTasks(
     toDoTasks: List<ToDoTask>,
     navigateToTaskScreen: (taskId: Int) -> Unit,
 ) {
@@ -40,7 +54,7 @@ fun ListContent(
             key = { task ->
                 task.id
             }
-            ) {task ->
+        ) {task ->
             TaskItem(toDoTask = task, navigateToTaskScreen = navigateToTaskScreen)
         }
     }
