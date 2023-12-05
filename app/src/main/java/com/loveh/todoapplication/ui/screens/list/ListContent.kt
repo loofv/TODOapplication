@@ -27,18 +27,21 @@ import com.loveh.todoapplication.data.models.Priority
 import com.loveh.todoapplication.data.models.ToDoTask
 import com.loveh.todoapplication.ui.theme.taskItemBackgroundColor
 import com.loveh.todoapplication.ui.theme.taskItemTextColor
+import com.loveh.todoapplication.util.RequestState
 
 @Composable
 fun ListContent(
-    toDoTasks: List<ToDoTask>,
+    toDoTasks: RequestState<List<ToDoTask>>,
     navigateToTaskScreen: (taskId: Int) -> Unit,
 ) {
-
-    if (toDoTasks.isNotEmpty()) {
-        DisplayTasks(toDoTasks = toDoTasks, navigateToTaskScreen = navigateToTaskScreen)
-    } else {
-        EmptyContent()
+    if (toDoTasks is RequestState.Success) {
+        if (toDoTasks.data.isEmpty()) {
+            EmptyContent()
+        } else {
+            DisplayTasks(toDoTasks = toDoTasks.data, navigateToTaskScreen = navigateToTaskScreen)
+        }
     }
+
 }
 
 @Composable
