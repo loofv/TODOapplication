@@ -25,9 +25,14 @@ import com.loveh.todoapplication.util.Action
 
 @Composable
 fun TaskAppBar(
+    selectedTask: ToDoTask?,
     navigateToListScreen: (Action) -> Unit
 ) {
-   NewTaskAppBar(navigateToListScreen = navigateToListScreen)
+    if (selectedTask == null) {
+        NewTaskAppBar(navigateToListScreen = navigateToListScreen)
+    } else {
+        ExistingTaskAppBar(navigateToListScreen = navigateToListScreen, selectedTask = selectedTask)
+    }
 }
 
 @Composable
