@@ -53,7 +53,7 @@ fun ListFab(
     onFabClicked: (taskId: Int) -> Unit
 ) {
     FloatingActionButton(onClick = {
-        onFabClicked(-1)
+        onFabClicked(-100)
     }) {
         Icon(
             imageVector = Icons.Filled.Add,
