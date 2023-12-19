@@ -1,5 +1,6 @@
 package com.loveh.todoapplication.ui.screens.list
 
+import android.util.Log
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.text.KeyboardActions
@@ -51,6 +52,7 @@ fun ListAppBar(
 
     when (searchAppBarState) {
         SearchAppBarState.CLOSED -> {
+            Log.d("ListAppBar", sharedViewModel.searchAppBarState.value.toString())
             DefaultListAppBar(
                 onSearchClicked = {
                     sharedViewModel.searchAppBarState.value = SearchAppBarState.OPENED
@@ -59,13 +61,17 @@ fun ListAppBar(
                 onDeleteClicked = {}
             )
         } else -> {
+        Log.d("ListAppBar", sharedViewModel.searchAppBarState.value.toString())
             SearchAppBar(text = searchTextState,
                 onTextChange = { sharedViewModel.searchTextState.value = it },
                 onCloseClicked = {
                     sharedViewModel.searchAppBarState.value = SearchAppBarState.CLOSED
                     sharedViewModel.searchTextState.value = ""
                 },
-                onSearchClicked = {}
+                onSearchClicked = {
+                    Log.d("ListAppBar", "searching db with: $it")
+                    sharedViewModel.searchDatabase(searchQuery = it)
+                }
             )
 
         }

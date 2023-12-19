@@ -22,28 +22,42 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.CreationExtras
 import com.loveh.todoapplication.data.models.Priority
 import com.loveh.todoapplication.data.models.ToDoTask
 import com.loveh.todoapplication.ui.theme.taskItemBackgroundColor
 import com.loveh.todoapplication.ui.theme.taskItemTextColor
 import com.loveh.todoapplication.util.RequestState
+import com.loveh.todoapplication.util.SearchAppBarState
 
 @Composable
 fun ListContent(
-    toDoTasks: RequestState<List<ToDoTask>>,
+    allTasks: RequestState<List<ToDoTask>>,
+    searchedTasks: RequestState<List<ToDoTask>>,
+    searchAppBarState: SearchAppBarState,
     navigateToTaskScreen: (taskId: Int) -> Unit,
 ) {
-    if (toDoTasks is RequestState.Success) {
-        if (toDoTasks.data.isEmpty()) {
-            EmptyContent()
-        } else {
-            DisplayTasks(toDoTasks = toDoTasks.data, navigateToTaskScreen = navigateToTaskScreen)
+    if (searchAppBarState == SearchAppBarState.TRIGGERED) {
+        if (searchedTasks is RequestState.Success) {
+            HandleListContent(tasks = searchedTasks.data, navigateToTaskScreen = navigateToTaskScreen)
+        }
+    } else {
+        if (allTasks is RequestState.Success) {
+            HandleListContent(tasks = allTasks.data, navigateToTaskScreen = navigateToTaskScreen)
         }
     }
-
 }
 
+@Composable
+fun HandleListContent(
+    tasks: List<ToDoTask>,
+    navigateToTaskScreen: (taskId: Int) -> Unit,
+) {
+    if (tasks.isEmpty()) {
+        EmptyContent()
+    } else {
+        DisplayTasks(toDoTasks = tasks, navigateToTaskScreen = navigateToTaskScreen)
+    }
+}
 @Composable
 fun DisplayTasks(
     toDoTasks: List<ToDoTask>,
