@@ -25,11 +25,18 @@ fun NavGraphBuilder.taskComposable(
         })
     ) { navBackStackEntry ->  
         val taskId = navBackStackEntry.arguments!!.getInt(TASK_ARGUMENT_KEY)
-        sharedViewModel.getSelectedTask(taskId = taskId)
+        LaunchedEffect(key1 = taskId) {
+            sharedViewModel.getSelectedTask(taskId = taskId)
+        }
+
         val selectedTask by sharedViewModel.selectedTask.collectAsState()
 
         LaunchedEffect(key1 = selectedTask) {
-            sharedViewModel.updateTaskFields(selectedTask = selectedTask)
+            // Don't think this check is necessary, commenting out for now.
+            // If you get empty tasks, this probably needs to be put back.
+//            if (selectedTask != null || taskId == -1) {
+                sharedViewModel.updateTaskFields(selectedTask = selectedTask)
+//            }
         }
 
         TaskScreen(navigateToListScreen = navigateToListScreen, sharedViewModel = sharedViewModel, selectedTask = selectedTask)

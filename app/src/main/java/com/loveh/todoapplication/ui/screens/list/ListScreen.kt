@@ -8,6 +8,7 @@ import androidx.compose.material.FloatingActionButton
 import androidx.compose.material.Icon
 import androidx.compose.material.Scaffold
 import androidx.compose.material.ScaffoldState
+import androidx.compose.material.SnackbarResult
 import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -51,6 +52,9 @@ fun ListScreen(
         scaffoldState = scaffoldState,
         handleDatabaseActions = { sharedViewModel.handleDatabaseActions(action = action) },
         taskTitle = sharedViewModel.title.value,
+        onUndoClicked = {
+            sharedViewModel.action.value = it
+        },
         action = action
     )
 
@@ -70,6 +74,10 @@ fun ListScreen(
                      lowPriorityTasks = lowPriorityTasks,
                      highPriorityTasks = highPriorityTasks,
                      sortState = sortState,
+                     onSwipeToDelete = { action, task ->
+                         sharedViewModel.action.value = action
+                         sharedViewModel.updateTaskFields(selectedTask = task)
+                     },
                      navigateToTaskScreen = navigateToTaskScreen)
         },
         floatingActionButton = {
@@ -99,18 +107,13 @@ private fun setMessage(action: Action, taskTitle: String): String {
     }
 }
 
-private fun setActionLabel(action: Action): String {
-    return if (action.name == "DELETE") {
-        "UNDO"
-    } else {
-        "OK"
-    }
-}
 @Composable
 fun DisplaySnackBar(
     scaffoldState: ScaffoldState,
     handleDatabaseActions: () -> Unit,
+    onUndoClicked: (Action) -> Unit,
     taskTitle: String,
+
     action: Action
 ) {
     handleDatabaseActions()
@@ -119,12 +122,34 @@ fun DisplaySnackBar(
     LaunchedEffect(key1 = action) {
         if (action != Action.NO_ACTION) {
             scope.launch {
-                scaffoldState.snackbarHostState.showSnackbar(
+                val snackbarResult = scaffoldState.snackbarHostState.showSnackbar(
                     message = setMessage(action = action, taskTitle = taskTitle),
                     actionLabel = setActionLabel(action = action)
+                )
+                undoDeletedTask(
+                    action = action,
+                    snackBarResult = snackbarResult,
+                    onUndoClicked = onUndoClicked,
                 )
             }
         }
     }
 
+}
+private fun setActionLabel(action: Action): String {
+    return if (action.name == "DELETE") {
+        "UNDO"
+    } else {
+        "OK"
+    }
+}
+
+private fun undoDeletedTask(
+    action: Action,
+    snackBarResult: SnackbarResult,
+    onUndoClicked: (Action) -> Unit
+) {
+    if (snackBarResult == SnackbarResult.ActionPerformed && action == Action.DELETE) {
+        onUndoClicked(Action.UNDO)
+    }
 }
