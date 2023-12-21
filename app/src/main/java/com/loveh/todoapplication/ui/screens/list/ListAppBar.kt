@@ -21,10 +21,10 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
@@ -43,7 +43,6 @@ import com.loveh.todoapplication.ui.theme.topAppBarIconColor
 import com.loveh.todoapplication.ui.viewmodels.SharedViewModel
 import com.loveh.todoapplication.util.Action
 import com.loveh.todoapplication.util.SearchAppBarState
-import com.loveh.todoapplication.util.TrailingIconState
 
 @Composable
 fun ListAppBar(
@@ -210,8 +209,6 @@ fun SearchAppBar(
     onSearchClicked: (String) -> Unit,
 ) {
 
-    var trailingIconState by remember { mutableStateOf(TrailingIconState.READY_TO_DELETE) }
-
     Surface(
         modifier = Modifier
             .fillMaxWidth()
@@ -251,19 +248,10 @@ fun SearchAppBar(
                 IconButton(
                     modifier = Modifier.alpha(ContentAlpha.disabled),
                     onClick = {
-                        when(trailingIconState) {
-                            TrailingIconState.READY_TO_DELETE -> {
-                                onTextChange("")
-                                trailingIconState = TrailingIconState.READY_TO_CLOSE
-                            }
-                            TrailingIconState.READY_TO_CLOSE -> {
-                                if (text.isNotEmpty()) {
-                                    onTextChange("")
-                                } else {
-                                    onCloseClicked()
-                                    trailingIconState = TrailingIconState.READY_TO_DELETE
-                                }
-                            }
+                        if (text.isNotEmpty()) {
+                            onTextChange("")
+                        } else {
+                            onCloseClicked()
                         }
                     }
                 )
