@@ -1,6 +1,6 @@
 # TODO Application
 #### Video demo 
-*Not yet implemented*
+https://youtu.be/tSiqsQL7-c8?si=4VGF06OEXht_gbIG
 #### Description
 This is a simple todo-list application that I coded in Kotlin using the latest technologies.
 #### Technologies used
