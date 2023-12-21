@@ -6,21 +6,17 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Delete
-import androidx.compose.material.icons.filled.Edit
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.graphics.vector.PathNode
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.room.Update
 import com.loveh.todoapplication.components.DisplayAlertDialog
 import com.loveh.todoapplication.data.models.Priority
 import com.loveh.todoapplication.data.models.ToDoTask
@@ -123,7 +119,9 @@ fun ExistingTaskAppBarActions(
         message = "Are you sure you want to delete ${selectedTask.title}?",
         openDialog = openDialog,
         closeDialog = { openDialog = false },
-        onYesClicked = { navigateToListScreen(Action.DELETE)}
+        onYesClicked = {
+            navigateToListScreen(Action.DELETE)
+        }
     )
 
     DeleteAction(onDeleteClicked = {
